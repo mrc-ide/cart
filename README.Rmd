@@ -24,6 +24,15 @@ knitr::opts_chunk$set(
 Use cart to help extract population, prevalence and vector cartographic information
   to use when parameterising context-specific runs of 
   [malariasimulation](https://mrc-ide.github.io/malariasimulation/).
+  
+This package draws on data from a number of sources, so please attribute and
+cite accordingly:
+
+1. [Malaria Atlas Project](https://malariaatlas.org/)
+2. [WorldPop](https://www.worldpop.org/)
+3. [geoBoundaries](https://www.geoboundaries.org/index.html)
+
+To get started please see the [introductory vignette](https://mrc-ide.github.io/cart/articles/Introduction.html)
 
 ## Installation
 

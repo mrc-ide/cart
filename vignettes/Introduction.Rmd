@@ -64,3 +64,8 @@ fc <- dplyr::left_join(fc, summary_data, by = "shapeName") %>%
   dplyr::select(pfpr)
 plot(fc)
 ```
+Other common operations we might want to perform would may include:
+
+1. Estimating population at risk, by setting the population in pixels outside
+of the spatial limits of transmission to equal 0
+2. Summarising the relative abundance of the top N vector species 
