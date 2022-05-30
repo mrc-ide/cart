@@ -13,6 +13,30 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/get_pop.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_prev.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_spatial_limits.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_vectors.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pipe.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pull_cart.html</loc>
+  </url>
+  <url>
+    <loc>/reference/tidyeval.html</loc>
+  </url>
+  <url>
+    <loc>/reference/unpack_cart.html</loc>
   </url>
 </urlset>
