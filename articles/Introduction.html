@@ -105,8 +105,11 @@
 <span class="va">fc</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">fc</span>, <span class="va">summary_data</span>, by <span class="op">=</span> <span class="st">"shapeName"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">pfpr</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fc</span><span class="op">)</span></code></pre></div>
-<p><img src="Introduction_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
-  </main>
+<p><img src="Introduction_files/figure-html/unnamed-chunk-4-1.png" width="672"> Other common operations we might want to perform would may include:</p>
+<ol style="list-style-type: decimal">
+<li>Estimating population at risk, by setting the population in pixels outside of the spatial limits of transmission to equal 0</li>
+<li>Summarising the relative abundance of the top N vector species</li>
+</ol></main>
 </div>
 
 
