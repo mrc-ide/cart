@@ -11,12 +11,15 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
+    knitr,
+    rmarkdown,
     roxygen2,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 RoxygenNote: 7.1.2
 Imports: 
     dplyr,
+    geojsonsf,
     jsonlite,
     magrittr,
     malariaAtlas,
@@ -24,4 +27,6 @@ Imports:
     rlang (>= 0.4.11),
     sf,
     terra,
-    tibble
+    tibble,
+    tidyr
+VignetteBuilder: knitr

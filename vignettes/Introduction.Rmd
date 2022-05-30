@@ -1,0 +1,66 @@
+---
+title: "Introduction"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+library(cart)
+library(terra)
+library(geojsonsf)
+library(jsonlite)
+library(dplyr)
+library(tidyr)
+```
+
+To parameterise a malariasimulation run for a specific context, we often need
+to gather and summarise spatial data, provided in the form of rasters. We can
+use cart to help get commonly used versions of these data. This can be
+
+1. Population estimates from [WorldPop](https://www.worldpop.org/).
+2. Vector species data from [Malaria Atlas Project](https://malariaatlas.org/).
+3. Prevalence maps from [Malaria Atlas Project](https://malariaatlas.org/).
+4. Spatial limits of transmission maps from [Malaria Atlas Project](https://malariaatlas.org/).
+
+To start we can supply the iso3c code for Togo and a recenbt year.
+
+```{r, message=FALSE, fig.width = 7, fig.height = 7}
+data <- pull_cart(iso3c = "TGO", year = 2019)
+terra::plot(data)
+```
+
+Next, we're going to extract the values for a given simple feature polyon set.
+Usually this would be nationally, or for some sub-national regions. Here, we're
+going to use the admin 1 units in Togo from [geoBoundaries](https://www.geoboundaries.org/index.html).
+
+```{r, warning=FALSE}
+shape_file <- jsonlite::fromJSON("https://www.geoboundaries.org/api/current/gbOpen/TGO/ADM1/")
+fc <- geojsonsf::geojson_sf(shape_file$gbAuthoritative$simplifiedGeometryGeoJSON)
+extracted_data <- unpack_cart(fc, data)
+```
+There are lots of post-processing steps we might want to do. For example, let's
+estimate the population weighted falciparum prevalence for each administrative unit in 
+Togo
+
+```{r, fig.width = 7, fig.height = 7}
+summary_data <- extracted_data %>%
+  dplyr::select(shapeName, pop, pfpr) %>%
+  tidyr::unnest(cols = c(pop, pfpr)) %>%
+  tidyr::drop_na() %>%
+  dplyr::group_by(shapeName) %>%
+  dplyr::summarise(pfpr = round(weighted.mean(pfpr, pop), 3))
+
+fc <- dplyr::left_join(fc, summary_data, by = "shapeName") %>%
+  dplyr::select(pfpr)
+plot(fc)
+```

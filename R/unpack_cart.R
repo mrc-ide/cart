@@ -1,6 +1,6 @@
 #' Extract information from rasters
 #'
-#' @param iso3c_sf A simplefeature shape file to extract for
+#' @param iso3c_sf A simple feature shape file to extract for
 #' @param stack The raster stack from \code{\link{pull_cart}}
 #'
 #' @return Tibble with list columns of raw extracted values

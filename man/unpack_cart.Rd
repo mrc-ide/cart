@@ -7,7 +7,7 @@
 unpack_cart(iso3c_sf, stack)
 }
 \arguments{
-\item{iso3c_sf}{A simplefeature shape file to extract for}
+\item{iso3c_sf}{A simple feature shape file to extract for}
 
 \item{stack}{The raster stack from \code{\link{pull_cart}}}
 }
