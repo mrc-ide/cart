@@ -14,6 +14,8 @@ Please note the different definitions of vector species metrics -
 especially relative abundance vs probability of occurrence.}
 
 \item{year}{Year of prevalence outputs}
+
+\item{pop}{Population raster}
 }
 \value{
 A List of vector species rasters.

@@ -10,6 +10,8 @@ get_spatial_limits(spatial_limits_rasters, pop)
 \item{spatial_limits_rasters}{List of spatial distribution limits rasters.
 Default is for both falciparum and vivax. See
 \code{\link[malariaAtlas]{listRaster}} for available rasters.}
+
+\item{pop}{Population raster}
 }
 \value{
 A List of spatial limits rasters.

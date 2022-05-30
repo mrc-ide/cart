@@ -12,6 +12,8 @@ get_prev(prevalence_rasters, year, pop)
 for both falciparum and vivax.}
 
 \item{year}{Year of prevalence outputs}
+
+\item{pop}{Population raster}
 }
 \value{
 A List of prevalence rasters.

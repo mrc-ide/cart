@@ -28,6 +28,7 @@ pull_cart <- function(iso3c, year,
                         pf_limits = "Plasmodium falciparum Spatial Limits",
                         pv_limits = "Plasmodium vivax Spatial Limits")){
 
+  # Pull data
   pop <- get_pop(iso3c = iso3c, year = year)
   prev <- get_prev(prevalence_rasters = prevalence_rasters, year = year, pop = pop)
   vectors <- get_vectors(vector_rasters = vector_rasters, year = year, pop = pop)
@@ -57,8 +58,8 @@ get_pop <- function(iso3c, year) {
   raster_meta <- jsonlite::fromJSON(paste0("https://www.worldpop.org/rest/data/pop/wpicuadj1km?iso3=", iso3c))
 
   raster_files <- raster_meta$data %>%
-    filter(popyear == year) %>%
-    dplyr::select(files) %>%
+    dplyr::filter(.data$popyear == year) %>%
+    dplyr::select(.data$files) %>%
     unlist()
 
   raster_file <- raster_files[grepl(".tif", raster_files)]
@@ -77,11 +78,12 @@ get_pop <- function(iso3c, year) {
 #' Downloads the specified \href{https://malariaatlas.org/}{malaria atlas project} prevalence rasters.
 #'
 #' @inheritParams pull_cart
+#' @param pop Population raster
 #'
 #' @return A List of prevalence rasters.
 #' @export
 get_prev <- function(prevalence_rasters, year, pop) {
-  pop_extent <- matrix(terra::ext(pop), ncol = 2, byrow = TRUE)
+  pop_extent <- get_extent(pop)
 
   prev <- list()
   for(i in seq_along(prevalence_rasters)){
@@ -104,11 +106,12 @@ get_prev <- function(prevalence_rasters, year, pop) {
 #'   vector species rasters.
 #'
 #' @inheritParams pull_cart
+#' @param pop Population raster
 #'
 #' @return A List of vector species rasters.
 #' @export
 get_vectors <- function(vector_rasters, year, pop) {
-  pop_extent <- matrix(terra::ext(pop), ncol = 2, byrow = TRUE)
+  pop_extent <- get_extent(pop)
 
   vectors <- list()
   for(i in seq_along(vector_rasters)){
@@ -119,9 +122,9 @@ get_vectors <- function(vector_rasters, year, pop) {
   vectors <- lapply(vectors, terra::rast)
 
   vectors <- lapply(vectors, function(x, y){
-    if(!identical(res(x), res(y))){
+    if(!identical(terra::res(x), terra::res(y))){
       x <- terra::resample(x, y)
-      values(x)[values(x) < 0] <- 0
+      terra::values(x)[terra::values(x) < 0] <- 0
     }
     return(x)
   }, y = pop)
@@ -135,11 +138,12 @@ get_vectors <- function(vector_rasters, year, pop) {
 #'   spatial limits of transmission rasters.
 #'
 #' @inheritParams pull_cart
+#' @param pop Population raster
 #'
 #' @return A List of spatial limits rasters.
 #' @export
 get_spatial_limits <- function(spatial_limits_rasters, pop) {
-  pop_extent <- matrix(terra::ext(pop), ncol = 2, byrow = TRUE)
+  pop_extent <- get_extent(pop)
 
   spatial_limits <- list()
   for(i in seq_along(spatial_limits_rasters)){
@@ -150,7 +154,7 @@ get_spatial_limits <- function(spatial_limits_rasters, pop) {
   spatial_limits <- lapply(spatial_limits, terra::rast)
 
   spatial_limits <- lapply(spatial_limits, function(x, y){
-    if(all.equal(res(x), res(y))){
+    if(all.equal(terra::res(x), terra::res(y))){
       # Use method near for classes
       x <- terra::resample(x, y, method = "near")
     }
@@ -158,4 +162,8 @@ get_spatial_limits <- function(spatial_limits_rasters, pop) {
   }, y = pop)
 
   return(spatial_limits)
+}
+
+get_extent <- function(x){
+  matrix(terra::ext(x), ncol = 2, byrow = TRUE)
 }
