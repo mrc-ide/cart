@@ -22,6 +22,7 @@ library(jsonlite)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(viridis)
 ```
 
 To parameterise a malariasimulation run for a specific context, we often need

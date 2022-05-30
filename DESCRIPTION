@@ -29,5 +29,6 @@ Imports:
     sf,
     terra,
     tibble,
-    tidyr
+    tidyr,
+    viridis
 VignetteBuilder: knitr
