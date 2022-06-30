@@ -13,6 +13,10 @@
 #' @param spatial_limits_rasters List of spatial distribution limits rasters.
 #'   Default is for both falciparum and vivax. See
 #'   \code{\link[malariaAtlas]{listRaster}} for available rasters.
+#' @param urban_density_threshold Threshold for urban clasification (people per square km).
+#' Default is 1500 people per square km. Based on urban classification by Eurostat,
+#' detailed in \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8065116/}{Khavari et al}.
+#'
 #'
 #' @return A raster stack
 #' @export
@@ -26,10 +30,12 @@ pull_cart <- function(iso3c, year,
                         pvpr = "Plasmodium vivax PR1-99 version 2020"),
                       spatial_limits_rasters = list(
                         pf_limits = "Plasmodium falciparum Spatial Limits",
-                        pv_limits = "Plasmodium vivax Spatial Limits")){
+                        pv_limits = "Plasmodium vivax Spatial Limits"),
+                      urban_density_threshold = 1500){
 
   # Pull data
   pop <- get_pop(iso3c = iso3c, year = year)
+  ur <- get_urban_rural(pop = pop, urban_density_threshold = urban_density_threshold)
   prev <- get_prev(prevalence_rasters = prevalence_rasters, year = year, pop = pop)
   vectors <- get_vectors(vector_rasters = vector_rasters, year = year, pop = pop)
   spatial_limits <- get_spatial_limits(spatial_limits_rasters = spatial_limits_rasters, pop = pop)
@@ -37,6 +43,7 @@ pull_cart <- function(iso3c, year,
   # Create stack
   rasters <- terra::rast(c(
     list(pop),
+    list(ur),
     prev,
     vectors,
     spatial_limits
@@ -71,6 +78,24 @@ get_pop <- function(iso3c, year) {
   names(pop) <- "pop"
 
   return(pop)
+}
+
+#' Get urban rural raster
+#'
+#' Recodes the population raster into urban and rural cells, based on a threshold
+#' population density.
+#'
+#' @param pop Population raster (at 1km squared)
+#' @inheritParams pull_cart
+#'
+#' @return Categorical raster
+get_urban_rural <- function(pop, urban_density_threshold){
+  ur <- pop
+  terra::values(ur)[terra::values(pop) < urban_density_threshold] <- 0
+  terra::values(ur)[terra::values(pop) >= urban_density_threshold] <- 1
+  levels(ur) <- c("rural", "urban")
+  names(ur) <- "urban_rural"
+  return(ur)
 }
 
 #' Get prevalence rasters.

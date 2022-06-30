@@ -13,8 +13,9 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 status](https://codecov.io/gh/mrc-ide/cart/branch/main/graph/badge.svg)](https://codecov.io/github/mrc-ide/cart)
 <!-- badges: end -->
 
-Use cart to help extract population, prevalence and vector cartographic
-information to use when parameterising context-specific runs of
+Use cart to help extract population, urban/rural, prevalence and vector
+cartographic information to use when parameterising context-specific
+runs of
 [malariasimulation](https://mrc-ide.github.io/malariasimulation/).
 
 This package draws on data from a number of sources, so please attribute
