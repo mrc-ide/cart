@@ -12,7 +12,8 @@ pull_cart(
   prevalence_rasters = list(pfpr = "Plasmodium falciparum PR2 - 10 version 2020", pvpr
     = "Plasmodium vivax PR1-99 version 2020"),
   spatial_limits_rasters = list(pf_limits = "Plasmodium falciparum Spatial Limits",
-    pv_limits = "Plasmodium vivax Spatial Limits")
+    pv_limits = "Plasmodium vivax Spatial Limits"),
+  urban_density_threshold = 1500
 )
 }
 \arguments{
@@ -33,6 +34,10 @@ for both falciparum and vivax.}
 \item{spatial_limits_rasters}{List of spatial distribution limits rasters.
 Default is for both falciparum and vivax. See
 \code{\link[malariaAtlas]{listRaster}} for available rasters.}
+
+\item{urban_density_threshold}{Threshold for urban clasification (people per square km).
+Default is 1500 people per square km. Based on urban classification by Eurostat,
+detailed in \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8065116/}{Khavari et al}.}
 }
 \value{
 A raster stack
