@@ -6,20 +6,24 @@
 \usage{
 pull_cart(
   iso3c,
-  year,
+  years,
   vector_rasters = list(funestus = "Anopheles funestus", arabiensis =
     "Anopheles arabiensis Patton, 1905", gambiae = "Anopheles gambiae Giles, 1902"),
   prevalence_rasters = list(pfpr = "Plasmodium falciparum PR2 - 10 version 2020", pvpr
     = "Plasmodium vivax PR1-99 version 2020"),
   spatial_limits_rasters = list(pf_limits = "Plasmodium falciparum Spatial Limits",
     pv_limits = "Plasmodium vivax Spatial Limits"),
+  intervention_rasters = list(itn_use =
+    "Insecticide treated bednet (ITN) use version 2020", irs_cov =
+    "Indoor Residual Spraying (IRS) coverage version 2020", tx =
+    "Effective treatment with an Antimalarial drug version 2020"),
   urban_density_threshold = 1500
 )
 }
 \arguments{
 \item{iso3c}{Country iso3c code}
 
-\item{year}{Year of prevalence outputs}
+\item{years}{Years}
 
 \item{vector_rasters}{List of vector species rasters.
 See \code{\link[malariaAtlas]{listRaster}} for available rasters. Specified
@@ -35,7 +39,11 @@ for both falciparum and vivax.}
 Default is for both falciparum and vivax. See
 \code{\link[malariaAtlas]{listRaster}} for available rasters.}
 
-\item{urban_density_threshold}{Threshold for urban clasification (people per square km).
+\item{intervention_rasters}{List of intervention coverage rasters.
+Default is for both ITN, IRS and treatment. See
+\code{\link[malariaAtlas]{listRaster}} for available rasters.}
+
+\item{urban_density_threshold}{Threshold for urban classification (people per square km).
 Default is 1500 people per square km. Based on urban classification by Eurostat,
 detailed in \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8065116/}{Khavari et al}.}
 }
@@ -43,5 +51,8 @@ detailed in \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8065116/}{Khavari
 A raster stack
 }
 \description{
-Pull cartographic information
+Creates a terra raster stack for specified country and datasets. Only years
+for which there are population data will be returned. Note, this
+function is fragile and may fail if specified rasters are not available for
+a given country.
 }

@@ -9,7 +9,7 @@ get_pop(iso3c, year)
 \arguments{
 \item{iso3c}{Country iso3c code}
 
-\item{year}{Year of prevalence outputs}
+\item{year}{Year}
 }
 \value{
 Population raster
