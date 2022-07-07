@@ -59,7 +59,7 @@ pull_cart <- function(iso3c,
   prevalence_rasters_available <- lapply(prevalence_rasters, raster_available,
                                          years = years, raster_list = raster_list)
   intervention_rasters_available <- lapply(intervention_rasters, raster_available,
-                                          years = years, raster_list = raster_list)
+                                           years = years, raster_list = raster_list)
 
   temporal <- list()
   for(i in seq_along(years)){
@@ -98,12 +98,14 @@ pull_cart <- function(iso3c,
 
   # Static
   vectors <- list()
-  for(i in seq_along(vector_rasters)){
-    vector <- get_map(raster = vector_rasters[[i]], pop = pop)
-    names(vector) <- names(vector_rasters)[i]
-    vectors[[i]] <- vector
+  if(!is.null(vector_rasters)){
+    for(i in seq_along(vector_rasters)){
+      vector <- get_map(raster = vector_rasters[[i]], pop = pop)
+      names(vector) <- names(vector_rasters)[i]
+      vectors[[i]] <- vector
+    }
+    vectors <- terra::rast(vectors)
   }
-  vectors <- terra::rast(vectors)
 
   # Combined
   rasters <- list(temporal = temporal, vectors = vectors)
