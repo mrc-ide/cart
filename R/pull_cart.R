@@ -134,7 +134,7 @@ get_pop <- function(iso3c, year) {
   raster_file <- raster_files[grepl(".tif", raster_files)]
 
   td <- tempdir()
-  raster_address <- paste0(td, "/", iso3c, ".tif")
+  raster_address <- paste0(td, "/", iso3c, "_", year, ".tif")
   df <- utils::download.file(url = raster_file, destfile = raster_address, mode = "wb")
   pop <- terra::rast(raster_address)
   names(pop) <- "pop"
