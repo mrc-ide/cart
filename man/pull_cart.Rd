@@ -17,7 +17,8 @@ pull_cart(
     "Insecticide treated bednet (ITN) use version 2020", irs_cov =
     "Indoor Residual Spraying (IRS) coverage version 2020", tx =
     "Effective treatment with an Antimalarial drug version 2020"),
-  urban_density_threshold = 1500
+  urban_density_threshold = 1500,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ Default is for both ITN, IRS and treatment. See
 \item{urban_density_threshold}{Threshold for urban classification (people per square km).
 Default is 1500 people per square km. Based on urban classification by Eurostat,
 detailed in \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8065116/}{Khavari et al}.}
+
+\item{quiet}{If TRUE, suppress status messages (if any), and the progress bar.}
 }
 \value{
 A raster stack

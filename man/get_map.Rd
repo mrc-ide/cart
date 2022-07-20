@@ -4,7 +4,7 @@
 \alias{get_map}
 \title{Get Malaria Atlas Project (MAP) rasters.}
 \usage{
-get_map(raster, pop, year = NA, method = "bilinear")
+get_map(raster, pop, year = NA, method = "bilinear", quiet = FALSE)
 }
 \arguments{
 \item{raster}{Raster}
@@ -14,6 +14,8 @@ get_map(raster, pop, year = NA, method = "bilinear")
 \item{year}{Year}
 
 \item{method}{See \code{\link[terra]{rast}} for more information}
+
+\item{quiet}{If TRUE, suppress status messages (if any), and the progress bar.}
 }
 \value{
 A raster.

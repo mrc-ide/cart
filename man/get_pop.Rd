@@ -4,12 +4,14 @@
 \alias{get_pop}
 \title{Get population raster.}
 \usage{
-get_pop(iso3c, year)
+get_pop(iso3c, year, quiet = FALSE)
 }
 \arguments{
 \item{iso3c}{Country iso3c code}
 
 \item{year}{Year}
+
+\item{quiet}{If TRUE, suppress status messages (if any), and the progress bar.}
 }
 \value{
 Population raster

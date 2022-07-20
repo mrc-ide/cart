@@ -24,6 +24,7 @@
 #' @param urban_density_threshold Threshold for urban classification (people per square km).
 #' Default is 1500 people per square km. Based on urban classification by Eurostat,
 #' detailed in \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8065116/}{Khavari et al}.
+#' @param quiet If TRUE, suppress status messages (if any), and the progress bar.
 #'
 #'
 #' @return A raster stack
@@ -48,7 +49,8 @@ pull_cart <- function(iso3c,
                         irs_cov = "Indoor Residual Spraying (IRS) coverage version 2020",
                         tx = "Effective treatment with an Antimalarial drug version 2020"
                       ),
-                      urban_density_threshold = 1500){
+                      urban_density_threshold = 1500,
+                      quiet = FALSE){
 
   # Temporal
   years <- years[pop_available(iso3c = iso3c, years = years)]
@@ -64,13 +66,13 @@ pull_cart <- function(iso3c,
   temporal <- list()
   for(i in seq_along(years)){
     # Population
-    pop <- get_pop(iso3c = iso3c, year = years[i])
+    pop <- get_pop(iso3c = iso3c, year = years[i], quiet = quiet)
     ur <- make_urban_rural(pop = pop, urban_density_threshold = urban_density_threshold)
     # Spatial limits
     if(i == 1){
       spatial_limits <- list()
       for(j in seq_along(spatial_limits_rasters)){
-        spatial_limit <- get_map(raster = spatial_limits_rasters[[j]], pop = pop, method = "near")
+        spatial_limit <- get_map(raster = spatial_limits_rasters[[j]], pop = pop, method = "near", quiet = quiet)
         names(spatial_limit) <- names(spatial_limits_rasters)[j]
         spatial_limits[[j]] <- spatial_limit
       }
@@ -80,7 +82,7 @@ pull_cart <- function(iso3c,
     # Prevalence
     for(j in seq_along(prevalence_rasters)){
       if(prevalence_rasters_available[[j]][i]){
-        prev <- get_map(raster = prevalence_rasters[[j]], pop = pop, year = years[i])
+        prev <- get_map(raster = prevalence_rasters[[j]], pop = pop, year = years[i], quiet = quiet)
         names(prev) <- names(prevalence_rasters)[j]
         temporal[[i]] <- c(temporal[[i]], prev)
       }
@@ -88,7 +90,7 @@ pull_cart <- function(iso3c,
     # Interventions
     for(j in seq_along(intervention_rasters)){
       if(intervention_rasters_available[[j]][i]){
-        int <- get_map(raster = intervention_rasters[[j]], pop = pop, year = years[i])
+        int <- get_map(raster = intervention_rasters[[j]], pop = pop, year = years[i], quiet = quiet)
         names(int) <- names(intervention_rasters)[j]
         temporal[[i]] <- c(temporal[[i]], int)
       }
@@ -100,7 +102,7 @@ pull_cart <- function(iso3c,
   vectors <- list()
   if(!is.null(vector_rasters)){
     for(i in seq_along(vector_rasters)){
-      vector <- get_map(raster = vector_rasters[[i]], pop = pop)
+      vector <- get_map(raster = vector_rasters[[i]], pop = pop, quiet = quiet)
       names(vector) <- names(vector_rasters)[i]
       vectors[[i]] <- vector
     }
@@ -120,10 +122,11 @@ pull_cart <- function(iso3c,
 #'
 #' @inheritParams pull_cart
 #' @param year Year
+#' @param quiet If TRUE, suppress status messages (if any), and the progress bar.
 #'
 #' @return Population raster
 #' @export
-get_pop <- function(iso3c, year) {
+get_pop <- function(iso3c, year, quiet = FALSE) {
   raster_meta <- jsonlite::fromJSON(paste0("https://www.worldpop.org/rest/data/pop/wpicuadj1km?iso3=", iso3c))
 
   raster_files <- raster_meta$data %>%
@@ -135,7 +138,7 @@ get_pop <- function(iso3c, year) {
 
   td <- tempdir()
   raster_address <- paste0(td, "/", iso3c, "_", year, ".tif")
-  df <- utils::download.file(url = raster_file, destfile = raster_address, mode = "wb")
+  df <- utils::download.file(url = raster_file, destfile = raster_address, mode = "wb", quiet = quiet)
   pop <- terra::rast(raster_address)
   names(pop) <- "pop"
 
@@ -168,13 +171,18 @@ make_urban_rural <- function(pop, urban_density_threshold){
 #' @param pop Population raster
 #' @param year Year
 #' @param method See \code{\link[terra]{rast}} for more information
+#' @param quiet If TRUE, suppress status messages (if any), and the progress bar.
 #'
 #' @return A raster.
 #' @export
-get_map <- function(raster, pop, year = NA, method = "bilinear") {
+get_map <- function(raster, pop, year = NA, method = "bilinear", quiet = FALSE) {
   pop_extent <- get_extent(pop)
 
-  out <- malariaAtlas::getRaster(surface = raster, year = year, extent = pop_extent)
+  if(quiet){
+    out <- suppressMessages(malariaAtlas::getRaster(surface = raster, year = year, extent = pop_extent))
+  } else {
+    out <- malariaAtlas::getRaster(surface = raster, year = year, extent = pop_extent)
+  }
 
   out <- terra::rast(out)
 
