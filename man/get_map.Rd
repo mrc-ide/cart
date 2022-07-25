@@ -4,7 +4,14 @@
 \alias{get_map}
 \title{Get Malaria Atlas Project (MAP) rasters.}
 \usage{
-get_map(raster, pop, year = NA, method = "bilinear", quiet = FALSE)
+get_map(
+  raster,
+  pop,
+  year = NA,
+  method = "bilinear",
+  quiet = FALSE,
+  resample = TRUE
+)
 }
 \arguments{
 \item{raster}{Raster}
@@ -15,7 +22,9 @@ get_map(raster, pop, year = NA, method = "bilinear", quiet = FALSE)
 
 \item{method}{See \code{\link[terra]{rast}} for more information}
 
-\item{quiet}{If TRUE, suppress status messages (if any), and the progress bar.}
+\item{quiet}{If TRUE, suppress status messages (if any), and the progress bar}
+
+\item{resample}{resample to match resolution and extent of pop}
 }
 \value{
 A raster.

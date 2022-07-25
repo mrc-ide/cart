@@ -103,8 +103,10 @@ pull_cart <- function(iso3c,
   if(!is.null(vector_rasters)){
     for(i in seq_along(vector_rasters)){
       vector <- get_map(raster = vector_rasters[[i]], pop = pop, quiet = quiet)
-      names(vector) <- names(vector_rasters)[i]
-      vectors[[i]] <- vector
+      if(!is.null(vector)){
+        names(vector) <- names(vector_rasters)[i]
+        vectors <- c(vectors, vector)
+      }
     }
     vectors <- terra::rast(vectors)
   }
@@ -171,23 +173,29 @@ make_urban_rural <- function(pop, urban_density_threshold){
 #' @param pop Population raster
 #' @param year Year
 #' @param method See \code{\link[terra]{rast}} for more information
-#' @param quiet If TRUE, suppress status messages (if any), and the progress bar.
+#' @param quiet If TRUE, suppress status messages (if any), and the progress bar
+#' @param resample resample to match resolution and extent of pop
 #'
 #' @return A raster.
 #' @export
-get_map <- function(raster, pop, year = NA, method = "bilinear", quiet = FALSE) {
+get_map <- function(raster, pop, year = NA, method = "bilinear", quiet = FALSE, resample = TRUE) {
   pop_extent <- get_extent(pop)
 
+  getRaster_safe <- purrr::possibly(malariaAtlas::getRaster, otherwise = NULL)
   if(quiet){
-    out <- suppressMessages(malariaAtlas::getRaster(surface = raster, year = year, extent = pop_extent))
+    out <- suppressMessages(getRaster_safe(surface = raster, year = year, extent = pop_extent))
   } else {
-    out <- malariaAtlas::getRaster(surface = raster, year = year, extent = pop_extent)
+    out <- getRaster_safe(surface = raster, year = year, extent = pop_extent)
   }
 
-  out <- terra::rast(out)
+  if(!is.null(out)){
+    out <- terra::rast(out)
 
-  if(!identical(terra::res(out), terra::res(pop))){
-    out <- terra::resample(out, pop, method = method)
+    if(resample){
+      if(!identical(terra::res(out), terra::res(pop))){
+        out <- terra::resample(out, pop, method = method)
+      }
+    }
   }
 
   return(out)
@@ -223,3 +231,6 @@ raster_available <- function(raster_name, years, raster_list){
   raster_list[raster_list$title == raster_name, "min_raster_year"] <= years &
     raster_list[raster_list$title == raster_name, "max_raster_year"] >= years
 }
+
+
+

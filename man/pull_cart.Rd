@@ -9,8 +9,8 @@ pull_cart(
   years,
   vector_rasters = list(funestus = "Anopheles funestus", arabiensis =
     "Anopheles arabiensis Patton, 1905", gambiae = "Anopheles gambiae Giles, 1902"),
-  prevalence_rasters = list(pfpr = "Plasmodium falciparum PR2 - 10 version 2020", pvpr
-    = "Plasmodium vivax PR1-99 version 2020"),
+  prevalence_rasters = list(pfpr = "Plasmodium falciparum PR2 - 10 version 2020", pvpr =
+    "Plasmodium vivax PR1-99 version 2020"),
   spatial_limits_rasters = list(pf_limits = "Plasmodium falciparum Spatial Limits",
     pv_limits = "Plasmodium vivax Spatial Limits"),
   intervention_rasters = list(itn_use =

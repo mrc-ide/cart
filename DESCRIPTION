@@ -16,7 +16,7 @@ Suggests:
     roxygen2,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Imports: 
     dplyr,
     geojsonsf,
@@ -25,6 +25,7 @@ Imports:
     magrittr,
     malariaAtlas,
     methods,
+    purrr,
     rlang (>= 0.4.11),
     sf,
     terra,
